@@ -13,15 +13,15 @@ export default function Header() {
             <div className="flex items-center gap-2.5 md:gap-6">
                 <a href="/" className="flex items-center gap-1 text-zinc-800">
                     <Image
-                        src="/nft-marketplace.png"
-                        alt="nft marketplace"
+                        src="/mintforge_icon.svg"
+                        alt="mintForge"
                         width={36}
                         height={36}
                     />
-                    <h1 className="font-bold text-2xl hidden md:block">NFT Marketplace</h1>
+                    <h1 className="font-bold text-2xl hidden md:block">mintFORGE</h1>
                 </a>
                 <a
-                    href="https://github.com/cyfrin/ts-nft-marketplace-cu"
+                    href="https://github.com/nwachee/mintForge.git"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-1 rounded-lg bg-zinc-900 hover:bg-zinc-800 transition-colors border-2 border-zinc-600 hover:border-zinc-500 cursor-alias hidden md:block"

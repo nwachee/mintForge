@@ -1,42 +1,6 @@
-# NFT Marketplace 
-
-The final project for the Cyfrin Web3 Full Stack crash course, where we introduce:
-
-1. Indexing (rindexer)
-2. Fleek CLI
-4. Compliance Engine
-5. USDC payment
-6. Gashawk
+# mintForge 
 
 A full-stack NFT marketplace with listing, buying, and compliance features built with Next.js, TypeScript, and Wagmi.
-
-# STARTING CODEBASE!
-
-We will need to implement:
-- Update the home page
-  - Add all recently listed NFTs
-  - Indexer
-- Compliance Engine
-
-If you wish to see what the final product looks like, head over to the `main` branch!
-
-
-# Table of Contents
-
-- [NFT Marketplace](#nft-marketplace)
-- [STARTING CODEBASE!](#starting-codebase)
-- [Table of Contents](#table-of-contents)
-- [Getting Started](#getting-started)
-  - [Requirements](#requirements)
-    - [Environment Variables](#environment-variables)
-  - [Setup](#setup)
-    - [Add Anvil to your metamask](#add-anvil-to-your-metamask)
-    - [Add Anvil accounts to your Metamask](#add-anvil-accounts-to-your-metamask)
-    - [Docker .env](#docker-env)
-  - [Running the Application](#running-the-application)
-- [Database Reset](#database-reset)
-- [Features](#features)
-- [Addresses for testing](#addresses-for-testing)
 
 # Getting Started
 

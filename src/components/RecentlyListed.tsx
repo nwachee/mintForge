@@ -86,6 +86,19 @@ function listingKey(item: InactiveItem) {
     return `${item.nftAddress?.toLowerCase()}-${item.tokenId}-${item.contractAddress?.toLowerCase()}-${item.network}`
 }
 
+// ── Skeleton card shown while loading ──────────────────────────────────────
+function SkeletonCard() {
+    return (
+        <div className="border rounded-lg overflow-hidden shadow-md animate-pulse">
+            <div className="aspect-square bg-gray-200" />
+            <div className="p-4 space-y-2">
+                <div className="h-4 bg-gray-200 rounded w-3/4" />
+                <div className="h-3 bg-gray-200 rounded w-1/2" />
+            </div>
+        </div>
+    )
+}
+
 export default function RecentlyListedNFTs() {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ["activeListings"],
@@ -110,6 +123,7 @@ export default function RecentlyListedNFTs() {
 
     return (
         <div className="container mx-auto px-4 py-8">
+            {/* ── Header ─────────────────────────────────────────────────── */}
             <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold">Recently Listed NFTs</h2>
                 <Link
@@ -120,45 +134,64 @@ export default function RecentlyListedNFTs() {
                 </Link>
             </div>
 
+            {/* ── Loading skeletons ───────────────────────────────────────── */}
             {isLoading && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4">
                     {Array.from({ length: 6 }).map((_, i) => (
-                        <div
-                            key={i}
-                            className="border rounded-lg overflow-hidden shadow-md animate-pulse"
-                        >
-                            <div className="aspect-square bg-gray-200" />
-                            <div className="p-4 space-y-2">
-                                <div className="h-4 bg-gray-200 rounded w-3/4" />
-                                <div className="h-3 bg-gray-200 rounded w-1/2" />
-                            </div>
-                        </div>
+                        <SkeletonCard key={i} />
                     ))}
                 </div>
             )}
 
+            {/* ── Error state ────────────────────────────────────────────── */}
             {isError && (
                 <div className="text-center py-12 text-red-500">
                     <p>Failed to load listings: {(error as Error).message}</p>
                 </div>
             )}
 
+            {/* ── Empty state ────────────────────────────────────────────── */}
             {!isLoading && !isError && activeListings.length === 0 && (
                 <div className="text-center py-12 text-gray-500">
                     <p>No active listings at the moment.</p>
                 </div>
             )}
 
+            {/* ── NFT grid ───────────────────────────────────────────────── */}
             {activeListings.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-                    {activeListings.map((listing) => (
-                        <NFTBox
-                            key={listing.nodeId}
-                            tokenId={listing.tokenId ?? ""}
-                            price={listing.price ?? "0"}
-                            contractAddress={listing.nftAddress ?? listing.contractAddress}
-                        />
-                    ))}
+                    {activeListings.map((listing) => {
+                        // The NFT contract address is nftAddress (the token contract),
+                        // not the marketplace contractAddress.
+                        const nftAddr = listing.nftAddress ?? listing.contractAddress
+                        const tokenId = listing.tokenId ?? ""
+
+                        return (
+                            /*
+                             * STEP 1 CHANGE:
+                             * Each card is now a Next.js Link that navigates to the
+                             * dedicated buy page for this specific NFT.
+                             *
+                             * URL pattern: /buy-nft/<nftAddress>/<tokenId>
+                             * e.g.  /buy-nft/0xABC.../3
+                             */
+                            <Link
+                                key={listing.nodeId}
+                                href={`/buy-nft/${nftAddr}/${tokenId}`}
+                                className="group block rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                data-testid={`nft-card-${tokenId}`}   // used by Playwright
+                            >
+                                {/* Hover ring around the whole card */}
+                                <div className="transition-shadow duration-200 group-hover:shadow-xl rounded-lg">
+                                    <NFTBox
+                                        tokenId={tokenId}
+                                        price={listing.price ?? "0"}
+                                        contractAddress={nftAddr}
+                                    />
+                                </div>
+                            </Link>
+                        )
+                    })}
                 </div>
             )}
         </div>
